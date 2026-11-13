@@ -1,58 +1,67 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI-TECH - By Radhe</title>
+<title>AI-TECH - My AI</title>
 <style>
-body{margin:0;font-family:system-ui;background:#0f172a;color:white;padding-bottom:20px}
-.header{background:linear-gradient(135deg,#7c3aed,#3b82f6);padding:40px 20px;text-align:center;border-radius:0 0 30px 30px}
-.header h1{margin:0;font-size:38px;letter-spacing:1px}
-.card{background:#1e293b;margin:16px;padding:18px;border-radius:18px;box-shadow:0 4px 20px rgba(0,0,0,0.3)}
-.btn{width:100%;padding:14px;border:none;border-radius:30px;background:#3b82f6;color:white;font-weight:bold;font-size:15px;margin-top:10px;cursor:pointer}
-.btn:active{transform:scale(0.97)}
-.small{color:#94a3b8;font-size:13px;margin-top:6px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-.grid .btn{margin-top:0}
-.live{border:2px solid #22c55e;background:#14532d}
-a{color:white;text-decoration:none}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui;background:#0f172a;color:white;display:flex;flex-direction:column;height:100vh}
+.top{background:#1e293b;padding:12px;text-align:center;border-bottom:1px solid #334155}
+.top h2{font-size:18px}
+#chat{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:12px}
+.msg{max-width:80%;padding:12px 16px;border-radius:18px;font-size:14px;line-height:1.4}
+.user{align-self:flex-end;background:#3b82f6;border-radius:18px 18px 2px 18px}
+.ai{align-self:flex-start;background:#1e293b;border:1px solid #334155;border-radius:18px 18px 18px 2px}
+.bottom{display:flex;gap:8px;padding:12px;background:#1e293b}
+.bottom input{flex:1;padding:12px 16px;border-radius:30px;border:1px solid #334155;background:#0f172a;color:white;outline:none}
+.bottom button{padding:12px 20px;border-radius:30px;border:none;background:#3b82f6;color:white;font-weight:bold}
 </style>
 </head>
 <body>
 
-<div class="header">
-<h1>🤖 AI-TECH</h1>
-<p>Your Daily AI & Tech Hub</p>
-<p class="small" style="color:white">Made with ❤️ by Radhe</p>
+<div class="top">
+<h2>🤖 AI-TECH - Apna AI</h2>
+<p style="font-size:11px;color:#94a3b8">Made by Radhe | Aapka Khud Ka ChatGPT</p>
 </div>
 
-<div class="card">
-<h3 style="margin:0">🔥 Best AI Tools</h3>
-<p class="small">Direct Open - No Coming Soon</p>
-<div class="grid">
-<button class="btn" onclick="window.open('https://chat.openai.com','_blank')">ChatGPT</button>
-<button class="btn" onclick="window.open('https://gemini.google.com','_blank')">Gemini</button>
-<button class="btn" onclick="window.open('https://www.bing.com/images/create','_blank')">Image AI</button>
-<button class="btn" onclick="window.open('https://suno.com','_blank')">Music AI</button>
-</div>
+<div id="chat">
+<div class="msg ai">Namaste Radhe! 🙏 Mai aapka apna AI hu. Ab aap jo bhi puchoge, mai yahi par jawab dunga. Pucho kuch?</div>
 </div>
 
-<div class="card">
-<h3 style="margin:0">📰 Tech News</h3>
-<p class="small">Today's AI & Tech News</p>
-<button class="btn" onclick="window.open('https://news.google.com/search?q=AI+Technology+news&hl=en-IN','_blank')">Read Live Tech News</button>
+<div class="bottom">
+<input id="input" placeholder="Yaha likho...">
+<button onclick="send()">Send</button>
 </div>
 
-<div class="card live">
-<h3 style="margin:0">✅ APP IS LIVE NOW</h3>
-<p style="margin:8px 0 0 0;font-size:14px">Aapki website ab puri tarah se kaam kar rahi hai!</p>
-<p class="small">Link: radhekrishan2034-design.github.io/Ai-tech/</p>
-</div>
+<script>
+const chat = document.getElementById('chat');
+const inp = document.getElementById('input');
 
-<div class="card" style="text-align:center">
-<p class="small">Version 2.0 | Storage Code Strong | 2026</p>
-</div>
+async function send(){
+ if(!inp.value.trim()) return;
+ let q = inp.value;
+ chat.innerHTML += `<div class="msg user">${q}</div>`;
+ inp.value = '';
+ chat.scrollTop = chat.scrollHeight;
+
+ let id = Date.now();
+ chat.innerHTML += `<div class="msg ai" id="${id}">Soch raha hu...</div>`;
+ 
+ try{
+  // Free AI API - No Key Needed for Demo
+  let res = await fetch(`https://text.pollinations.ai/${encodeURIComponent(q)}?model=openai`);
+  let ans = await res.text();
+  document.getElementById(id).innerText = ans;
+ }catch(e){
+  document.getElementById(id).innerText = "Bhai network slow hai, fir se pucho. Lekin mai aapka hi AI hu, ab bahar nahi jaunga!";
+ }
+ chat.scrollTop = chat.scrollHeight;
+}
+
+inp.addEventListener('keypress', (e)=>{ if(e.key==='Enter') send(); });
+</script>
 
 </body>
 </html>
